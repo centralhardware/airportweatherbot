@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "2.0.0"
 }
 
 group = "me.centralhardware"
@@ -11,19 +11,16 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.centralhardware:telegram-bot-commons:b32359d2de")
-    implementation("dev.inmo:tgbotapi:11.0.0")
-    implementation("io.github.mivek:metarParser-services:2.15.2")
-    implementation("io.arrow-kt:arrow-core:1.2.1")
+    implementation("com.github.centralhardware:telegram-bot-commons:2a55dd22e2")
+    implementation("dev.inmo:tgbotapi:13.0.0")
+    implementation("io.github.mivek:metarParser-services:2.16.0")
+    implementation("io.arrow-kt:arrow-core:1.2.4")
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.3")
-    implementation("com.google.guava:guava:33.0.0-jre")
+    implementation("com.google.guava:guava:33.2.0-jre")
     implementation("org.slf4j:slf4j-api:2.0.12")
-    implementation("ch.qos.logback:logback-classic:1.5.0")
-    implementation("ch.qos.logback:logback-core:1.5.0")
+    implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("ch.qos.logback:logback-core:1.5.6")
     implementation("io.github.crackthecodeabhi:kreds:0.9.1")
-    implementation("com.clickhouse:clickhouse-jdbc:0.6.0")
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.3.1")
-    implementation("org.lz4:lz4-java:1.8.0")
     implementation("com.github.seratch:kotliquery:1.9.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }

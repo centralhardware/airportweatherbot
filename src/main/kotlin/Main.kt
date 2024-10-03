@@ -28,8 +28,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import me.centralhardware.telegram.bot.common.ClickhouseKt
-import me.centralhardware.telegram.bot.common.MessageType
 import org.slf4j.LoggerFactory
 import java.util.*
 

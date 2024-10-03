@@ -39,17 +39,15 @@ val redisClient = newClient(Endpoint.from(System.getenv("REDIS_URL")))
 
 
 suspend fun main() {
-    val clickhouse = ClickhouseKt()
     telegramBotWithBehaviourAndLongPolling(System.getenv("BOT_TOKEN"),
         CoroutineScope(Dispatchers.IO),
         defaultExceptionsHandler = { log.warn("", it) }) {
         setMyCommands(
-            BotCommand("metar", "Get metar. Usage: /w <icao>"),
+            BotCommand("Metar", "Get metar. Usage: /w <icao>"),
             BotCommand("taf", "Get taf. Usage: /taf <icao>"),
             BotCommand("r", "repeat last command")
         )
         onCommandWithArgs(Regex("metar|m")) { message, args ->
-            async { clickhouse.log(message.text!!,message.from!!.asCommonUser(), "metarBot", MessageType.TEXT) }
             log(message.text, message.from)
             withAction(message.chat.id, TypingAction) {
                 IcaoStorage.get(args.first().lowercase()).fold(
@@ -66,7 +64,6 @@ suspend fun main() {
             }
         }
         onCommandWithArgs(Regex("taf|t")) { message, args ->
-            async { clickhouse.log(message.text!!,message.from!!.asCommonUser(), "metarBot", MessageType.TEXT) }
             log(message.text, message.from)
             withAction(message.chat.id, TypingAction) {
                 IcaoStorage.get(args.first().lowercase()).fold(
@@ -83,7 +80,6 @@ suspend fun main() {
             }
         }
         onCommand("r") {
-            async { clickhouse.log(it.text!!, it.from!!.asCommonUser(), "metarBot", MessageType.TEXT) }
             withAction(it.chat.id, TypingAction) {
                 val key = "${it.from!!.id.chatId}@history"
                 val command = redisClient.lmove(key, key, LeftRightOption.LEFT, LeftRightOption.LEFT)!!
@@ -101,7 +97,6 @@ suspend fun main() {
             }
         }
         onAnyInlineQuery {
-            async { clickhouse.log(it.query!!, it.from.asCommonUser(), "metarBot", MessageType.INLINE) }
             log("inline " + it.query, it.from)
             IcaoStorage.get(it.query.lowercase()).map { value ->
                 val res = awaitAll(
@@ -127,7 +122,6 @@ suspend fun main() {
             }
         }
         onDataCallbackQuery {
-            async { clickhouse.log(it.data, it.from.asCommonUser(), "metarBot", MessageType.CALLBACK) }
             answerCallbackQuery(it, redisClient.get("raw_messages_${it.data}"), showAlert = true)
         }
 

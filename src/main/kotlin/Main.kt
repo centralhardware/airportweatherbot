@@ -41,7 +41,7 @@ suspend fun main() {
         CoroutineScope(Dispatchers.IO),
         defaultExceptionsHandler = { log.warn("", it) }) {
         setMyCommands(
-            BotCommand("Metar", "Get metar. Usage: /w <icao>"),
+            BotCommand("metar", "Get metar. Usage: /w <icao>"),
             BotCommand("taf", "Get taf. Usage: /taf <icao>"),
             BotCommand("r", "repeat last command")
         )

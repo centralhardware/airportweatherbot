@@ -1,3 +1,4 @@
+import com.sun.net.httpserver.HttpServer
 import dev.inmo.tgbotapi.extensions.api.answers.answer
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.api.bot.setMyCommands
@@ -29,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import org.slf4j.LoggerFactory
+import java.net.InetSocketAddress
 import java.util.*
 
 
@@ -37,6 +39,7 @@ val redisClient = newClient(Endpoint.from(System.getenv("REDIS_URL")))
 
 
 suspend fun main() {
+    HttpServer.create().apply { bind(InetSocketAddress(80), 0); createContext("/health") { it.sendResponseHeaders(200, 0); it.responseBody.close() }; start() }
     telegramBotWithBehaviourAndLongPolling(System.getenv("BOT_TOKEN"),
         CoroutineScope(Dispatchers.IO),
         defaultExceptionsHandler = { log.warn("", it) }) {

@@ -9,17 +9,12 @@ repositories {
     mavenCentral()
 }
 
-val logbackVersion = "1.5.8"
-
 dependencies {
     implementation("dev.inmo:tgbotapi:18.2.1")
     implementation("io.github.mivek:metarParser-services:2.16.0")
     implementation("io.arrow-kt:arrow-core:1.2.4")
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")
     implementation("com.google.guava:guava:33.3.1-jre")
-    implementation("org.slf4j:slf4j-api:2.0.16")
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
-    implementation("ch.qos.logback:logback-core:$logbackVersion")
     implementation("io.github.crackthecodeabhi:kreds:0.9.1")
     implementation("com.github.seratch:kotliquery:1.9.0")
 }

@@ -1,4 +1,9 @@
 import com.sun.net.httpserver.HttpServer
+import dev.inmo.kslog.common.KSLog
+import dev.inmo.kslog.common.LogLevel
+import dev.inmo.kslog.common.info
+import dev.inmo.kslog.common.setDefaultKSLog
+import dev.inmo.kslog.common.warning
 import dev.inmo.tgbotapi.extensions.api.answers.answer
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.api.bot.setMyCommands
@@ -28,20 +33,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import org.slf4j.LoggerFactory
 import java.net.InetSocketAddress
 import java.util.*
 
 
-val log = LoggerFactory.getLogger("root")
 val redisClient = newClient(Endpoint.from(System.getenv("REDIS_URL")))
 
 
 suspend fun main() {
     HttpServer.create().apply { bind(InetSocketAddress(80), 0); createContext("/health") { it.sendResponseHeaders(200, 0); it.responseBody.close() }; start() }
+    setDefaultKSLog(KSLog("metarBot", minLoggingLevel = LogLevel.INFO))
     telegramBotWithBehaviourAndLongPolling(System.getenv("BOT_TOKEN"),
         CoroutineScope(Dispatchers.IO),
-        defaultExceptionsHandler = { log.warn("", it) }) {
+        defaultExceptionsHandler = { KSLog.warning("", it) }) {
         setMyCommands(
             BotCommand("metar", "Get metar. Usage: /w <icao>"),
             BotCommand("taf", "Get taf. Usage: /taf <icao>"),
@@ -141,6 +145,6 @@ suspend fun saveRawMessage(raw: String): String{
 
 fun log(text: String?, from: User?) {
     from?.let {
-        log.info("$text from ${it.id.chatId} ${it.firstName} ${it.lastName}")
+        KSLog.info("$text from ${it.id.chatId} ${it.firstName} ${it.lastName}")
     }
 }

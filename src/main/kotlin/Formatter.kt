@@ -1,3 +1,5 @@
+import dev.inmo.kslog.common.KSLog
+import dev.inmo.kslog.common.info
 import io.github.mivek.model.*
 import io.github.mivek.service.MetarService
 import io.github.mivek.service.TAFService
@@ -9,13 +11,13 @@ object Formatter {
     val tafService = TAFService.getInstance()
 
     fun getMetar(icao: Icao): Pair<String, String> {
-        log.info("get metar for $icao")
+        KSLog.info("get metar for $icao")
         val metar = metarService.retrieveFromAirport(icao.code)
         return Pair(getCommon(metar), metar.message)
     }
 
     fun getTaf(icao: Icao): Pair<String, String> {
-        log.info("get taf for $icao")
+        KSLog.info("get taf for $icao")
         val taf = tafService.retrieveFromAirport(icao.code)
         return Pair(getCommon(taf), taf.message)
     }

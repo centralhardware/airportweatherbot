@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.0.0"
+    kotlin("jvm") version "2.0.20"
 }
 
 group = "me.centralhardware"
@@ -7,21 +7,21 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    maven { setUrl("https://jitpack.io") }
 }
 
+val logbackVersion = "1.5.8"
+
 dependencies {
-    implementation("dev.inmo:tgbotapi:13.0.0")
+    implementation("dev.inmo:tgbotapi:18.2.1")
     implementation("io.github.mivek:metarParser-services:2.16.0")
     implementation("io.arrow-kt:arrow-core:1.2.4")
-    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.3")
-    implementation("com.google.guava:guava:33.2.0-jre")
-    implementation("org.slf4j:slf4j-api:2.0.12")
-    implementation("ch.qos.logback:logback-classic:1.5.6")
-    implementation("ch.qos.logback:logback-core:1.5.6")
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")
+    implementation("com.google.guava:guava:33.3.1-jre")
+    implementation("org.slf4j:slf4j-api:2.0.16")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("ch.qos.logback:logback-core:$logbackVersion")
     implementation("io.github.crackthecodeabhi:kreds:0.9.1")
     implementation("com.github.seratch:kotliquery:1.9.0")
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
 tasks.test {

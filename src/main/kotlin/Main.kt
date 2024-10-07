@@ -1,9 +1,9 @@
 import com.sun.net.httpserver.HttpServer
 import dev.inmo.kslog.common.KSLog
-import dev.inmo.kslog.common.LogLevel
+import dev.inmo.kslog.common.configure
 import dev.inmo.kslog.common.info
-import dev.inmo.kslog.common.setDefaultKSLog
 import dev.inmo.kslog.common.warning
+import dev.inmo.tgbotapi.bot.ktor.HealthCheckKtorPipelineStepsHolder
 import dev.inmo.tgbotapi.extensions.api.answers.answer
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.api.bot.setMyCommands
@@ -40,12 +40,21 @@ import java.util.*
 val redisClient = newClient(Endpoint.from(System.getenv("REDIS_URL")))
 
 
+val healthchecker: HealthCheckKtorPipelineStepsHolder = HealthCheckKtorPipelineStepsHolder();
 suspend fun main() {
-    HttpServer.create().apply { bind(InetSocketAddress(80), 0); createContext("/health") { it.sendResponseHeaders(200, 0); it.responseBody.close() }; start() }
-    setDefaultKSLog(KSLog("metarBot", minLoggingLevel = LogLevel.INFO))
+    HttpServer.create().apply { bind(InetSocketAddress(80), 0); createContext("/health") {
+        if (healthchecker.health.value) {
+            it.sendResponseHeaders(200, 0);
+        } else {
+            it.sendResponseHeaders(400, 0);
+        }
+        it.responseBody.close()
+    }; start() }
+    KSLog.configure("MetarBot")
     telegramBotWithBehaviourAndLongPolling(System.getenv("BOT_TOKEN"),
         CoroutineScope(Dispatchers.IO),
-        defaultExceptionsHandler = { KSLog.warning("", it) }) {
+        defaultExceptionsHandler = { KSLog.warning("", it) },
+        builder = { pipelineStepsHolder= healthchecker }) {
         setMyCommands(
             BotCommand("metar", "Get metar. Usage: /w <icao>"),
             BotCommand("taf", "Get taf. Usage: /taf <icao>"),

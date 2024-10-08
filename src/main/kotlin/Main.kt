@@ -1,4 +1,3 @@
-import com.sun.net.httpserver.HttpServer
 import dev.inmo.kslog.common.KSLog
 import dev.inmo.kslog.common.configure
 import dev.inmo.kslog.common.info
@@ -33,7 +32,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import java.net.InetSocketAddress
 import java.util.*
 
 
@@ -42,14 +40,6 @@ val redisClient = newClient(Endpoint.from(System.getenv("REDIS_URL")))
 
 val healthchecker: HealthCheckKtorPipelineStepsHolder = HealthCheckKtorPipelineStepsHolder();
 suspend fun main() {
-    HttpServer.create().apply { bind(InetSocketAddress(80), 0); createContext("/health") {
-        if (healthchecker.health.value) {
-            it.sendResponseHeaders(200, 0);
-        } else {
-            it.sendResponseHeaders(400, 0);
-        }
-        it.responseBody.close()
-    }; start() }
     KSLog.configure("MetarBot")
     telegramBotWithBehaviourAndLongPolling(System.getenv("BOT_TOKEN"),
         CoroutineScope(Dispatchers.IO),

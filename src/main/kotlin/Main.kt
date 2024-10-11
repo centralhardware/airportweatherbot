@@ -1,8 +1,9 @@
 import dev.inmo.kslog.common.KSLog
 import dev.inmo.kslog.common.configure
 import dev.inmo.kslog.common.info
-import dev.inmo.kslog.common.warning
 import dev.inmo.tgbotapi.HealthCheck
+import dev.inmo.tgbotapi.KSLogExceptionsHandler
+import dev.inmo.tgbotapi.botToken
 import dev.inmo.tgbotapi.extensions.api.answers.answer
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.api.bot.setMyCommands
@@ -40,9 +41,11 @@ val redisClient = newClient(Endpoint.from(System.getenv("REDIS_URL")))
 
 suspend fun main() {
     KSLog.configure("MetarBot")
-    telegramBotWithBehaviourAndLongPolling(System.getenv("BOT_TOKEN"),
+    telegramBotWithBehaviourAndLongPolling(
+        botToken,
         CoroutineScope(Dispatchers.IO),
-        defaultExceptionsHandler = { KSLog.warning("", it) }) {
+        defaultExceptionsHandler = KSLogExceptionsHandler
+    ) {
         HealthCheck.addBot(this)
         setMyCommands(
             BotCommand("metar", "Get metar. Usage: /w <icao>"),

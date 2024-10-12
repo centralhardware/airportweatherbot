@@ -1,15 +1,11 @@
 import dev.inmo.kslog.common.KSLog
 import dev.inmo.kslog.common.configure
 import dev.inmo.kslog.common.info
-import dev.inmo.tgbotapi.HealthCheck
-import dev.inmo.tgbotapi.KSLogExceptionsHandler
-import dev.inmo.tgbotapi.botToken
 import dev.inmo.tgbotapi.extensions.api.answers.answer
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.api.bot.setMyCommands
 import dev.inmo.tgbotapi.extensions.api.send.sendTextMessage
 import dev.inmo.tgbotapi.extensions.api.send.withAction
-import dev.inmo.tgbotapi.extensions.behaviour_builder.telegramBotWithBehaviourAndLongPolling
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onAnyInlineQuery
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onCommand
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onCommandWithArgs
@@ -18,6 +14,7 @@ import dev.inmo.tgbotapi.extensions.utils.extensions.raw.from
 import dev.inmo.tgbotapi.extensions.utils.extensions.raw.text
 import dev.inmo.tgbotapi.extensions.utils.types.buttons.dataButton
 import dev.inmo.tgbotapi.extensions.utils.types.buttons.inlineKeyboard
+import dev.inmo.tgbotapi.longPolling
 import dev.inmo.tgbotapi.types.BotCommand
 import dev.inmo.tgbotapi.types.InlineQueries.InlineQueryResult.InlineQueryResultArticle
 import dev.inmo.tgbotapi.types.InlineQueries.InputMessageContent.InputTextMessageContent
@@ -29,8 +26,6 @@ import io.github.crackthecodeabhi.kreds.args.LeftRightOption
 import io.github.crackthecodeabhi.kreds.args.SetOption
 import io.github.crackthecodeabhi.kreds.connection.Endpoint
 import io.github.crackthecodeabhi.kreds.connection.newClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import java.util.*
@@ -41,12 +36,7 @@ val redisClient = newClient(Endpoint.from(System.getenv("REDIS_URL")))
 
 suspend fun main() {
     KSLog.configure("MetarBot")
-    telegramBotWithBehaviourAndLongPolling(
-        botToken,
-        CoroutineScope(Dispatchers.IO),
-        defaultExceptionsHandler = KSLogExceptionsHandler
-    ) {
-        HealthCheck.addBot(this)
+    longPolling {
         setMyCommands(
             BotCommand("metar", "Get metar. Usage: /w <icao>"),
             BotCommand("taf", "Get taf. Usage: /taf <icao>"),

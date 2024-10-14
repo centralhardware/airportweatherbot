@@ -1,6 +1,6 @@
 import dev.inmo.kslog.common.KSLog
-import dev.inmo.kslog.common.configure
 import dev.inmo.kslog.common.info
+import dev.inmo.tgbotapi.AppConfig
 import dev.inmo.tgbotapi.extensions.api.answers.answer
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.api.bot.setMyCommands
@@ -35,7 +35,7 @@ val redisClient = newClient(Endpoint.from(System.getenv("REDIS_URL")))
 
 
 suspend fun main() {
-    KSLog.configure("MetarBot")
+    AppConfig.init("MetarBot")
     longPolling {
         setMyCommands(
             BotCommand("metar", "Get metar. Usage: /w <icao>"),

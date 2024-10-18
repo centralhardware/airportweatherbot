@@ -8,11 +8,12 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     maven("https://jitpack.io")
+    maven("https://nexus.inmo.dev/repository/maven-releases/")
 }
 
 dependencies {
-    implementation("dev.inmo:tgbotapi:18.2.1")
-    implementation("com.github.centralhardware:telegram-bot-commons:d289ac997d")
+    implementation("dev.inmo:tgbotapi:18.2.2-branch_18.2.2-build2465")
+    implementation("com.github.centralhardware:telegram-bot-commons:1e503cc156")
     implementation("io.github.mivek:metarParser-services:2.16.0")
     implementation("io.arrow-kt:arrow-core:1.2.4")
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")

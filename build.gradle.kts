@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     implementation("dev.inmo:tgbotapi:18.2.2")
-    implementation("com.github.centralhardware:telegram-bot-commons:1b5b37063e")
+    implementation("com.github.centralhardware:telegram-bot-commons:1aec284aa3")
     implementation("io.github.mivek:metarParser-services:2.16.0")
     implementation("io.arrow-kt:arrow-core:1.2.4")
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")

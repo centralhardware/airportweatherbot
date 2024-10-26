@@ -23,25 +23,30 @@ object Formatter {
     }
 
     fun getCommon(container: AbstractWeatherCode): String {
-        val specific = when (container) {
-            is Metar -> """
+        val specific =
+            when (container) {
+                is Metar ->
+                    """
                 ${container.day} ${container.time}
                 temp: ${container.temperature}, dew point: ${container.dewPoint}, ${if (container.isNosig == true) "nosig" else ""}
-                """.trimIndent().trimMargin()
-
-            is TAF -> container.validity.let {
-                "${it.startDay}d ${it.startHour}h - ${it.endDay}d ${it.endHour}"
+                """
+                        .trimIndent()
+                        .trimMargin()
+                is TAF ->
+                    container.validity.let {
+                        "${it.startDay}d ${it.startHour}h - ${it.endDay}d ${it.endHour}"
+                    }
+                else -> throw IllegalArgumentException()
             }
-
-            else -> throw IllegalArgumentException()
-        }
 
         val sb = StringBuilder()
         sb.append(getAirport(container.airport))
         sb.append("\n").append(specific)
         getWind(container.wind).ifNotEmpty { sb.append("\n").append(it) }
         sb.append("\n").append(getVisibility(container.visibility))
-        getVerticalVisibility(container.verticalVisibility).ifNotEmpty { sb.append("\n").append(it) }
+        getVerticalVisibility(container.verticalVisibility).ifNotEmpty {
+            sb.append("\n").append(it)
+        }
         getWeatherConditions(container.weatherConditions).ifNotEmpty { sb.append("\n").append(it) }
         getClouds(container.clouds).ifNotEmpty { sb.append("\n").append(it) }
         getRemark(container.remark).ifNotEmpty { sb.append("\n").append(it) }
@@ -59,33 +64,36 @@ object Formatter {
         "${airport.name} ${airport.icao}(${airport.iata}) ${airport.altitude}"
 
     fun getWind(wind: Wind?): String =
-        if (wind == null) "" else {
+        if (wind == null) ""
+        else {
             "wind: ${convertSpeed(wind.speed, wind.unit)} km/h ${wind.directionDegrees}(${wind.direction})"
         }
 
-    fun getVisibility(visibility: Visibility): String =
-        "visibility: ${visibility.mainVisibility}"
+    fun getVisibility(visibility: Visibility): String = "visibility: ${visibility.mainVisibility}"
 
     fun getVerticalVisibility(visibility: Int?): String =
-        if (visibility == null) "" else {
+        if (visibility == null) ""
+        else {
             "vertical visibility: $visibility"
         }
 
     private fun getRemark(remark: String?): String =
-        if (remark.isNullOrBlank()) "" else {
+        if (remark.isNullOrBlank()) ""
+        else {
             "remark: $remark"
         }
 
     private fun getWeatherConditions(weatherCondition: List<WeatherCondition>): String =
-        weatherCondition.map {
-            "${it.intensity?.let { it.name.lowercase() }} ${it.descriptive} ${it.phenomenons.joinToString(",")}"
-        }.joinToString(",").trim()
+        weatherCondition
+            .map {
+                "${it.intensity?.let { it.name.lowercase() }} ${it.descriptive} ${it.phenomenons.joinToString(",")}"
+            }
+            .joinToString(",")
+            .trim()
 
     private fun getClouds(clouds: List<Cloud>): String =
         clouds
             .sortedBy { it.height }
-            .map {
-                "${it.type} ${it.quantity} ${it.height}"
-            }.joinToString(",").trim()
-
+            .joinToString(",") { "${it.type} ${it.quantity} ${it.height}" }
+            .trim()
 }

@@ -4,6 +4,6 @@ fun String?.ifNotEmpty(block: (String) -> Unit) {
     }
 }
 
-fun String.asIcao(): Icao{
+fun String.asIcao(): Icao {
     return Icao(this)
 }

@@ -16,7 +16,6 @@ class Iata(code: String) : AirportCode(code) {
             return value.length == 3
         }
     }
-
 }
 
 class Icao(code: String) : AirportCode(code) {
@@ -30,10 +29,10 @@ class Icao(code: String) : AirportCode(code) {
             return value.length == 4
         }
     }
-
 }
 
 private val airportProvider = ServiceLoader.load(AirportProvider::class.java).iterator().next()
+
 fun Iata.asIcao(): Icao? {
     return airportProvider.airports
         .filter { it.value.iata.lowercase() == this.code }

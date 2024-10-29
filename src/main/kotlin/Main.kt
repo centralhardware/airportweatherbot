@@ -38,7 +38,7 @@ suspend fun main() {
             setMyCommands(
                 BotCommand("metar", "Get metar. Usage: /w <icao>"),
                 BotCommand("taf", "Get taf. Usage: /taf <icao>"),
-                BotCommand("r", "repeat last command")
+                BotCommand("r", "repeat last command"),
             )
             onCommandWithArgs(Regex("metar|m")) { message, args ->
                 log(message.text, message.from)
@@ -57,12 +57,12 @@ suspend fun main() {
                                             row {
                                                 dataButton(
                                                     "raw message",
-                                                    saveRawMessage(metar.second)
+                                                    saveRawMessage(metar.second),
                                                 )
                                             }
-                                        }
+                                        },
                                 )
-                            }
+                            },
                         )
                 }
             }
@@ -83,12 +83,12 @@ suspend fun main() {
                                             row {
                                                 dataButton(
                                                     "raw message",
-                                                    saveRawMessage(taf.second)
+                                                    saveRawMessage(taf.second),
                                                 )
                                             }
-                                        }
+                                        },
                                 )
-                            }
+                            },
                         )
                 }
             }
@@ -111,7 +111,7 @@ suspend fun main() {
                         replyMarkup =
                             inlineKeyboard {
                                 row { dataButton("raw message", saveRawMessage(res.second)) }
-                            }
+                            },
                     )
                 }
             }
@@ -121,7 +121,7 @@ suspend fun main() {
                     val res =
                         awaitAll(
                             async { Formatter.getMetar(value).first },
-                            async { Formatter.getTaf(value).first }
+                            async { Formatter.getTaf(value).first },
                         )
                     answer(
                         it,
@@ -129,15 +129,15 @@ suspend fun main() {
                             InlineQueryResultArticle(
                                 InlineQueryId(it.query + "metar"),
                                 "metar",
-                                InputTextMessageContent(res[0])
+                                InputTextMessageContent(res[0]),
                             ),
                             InlineQueryResultArticle(
                                 InlineQueryId(it.query + "taf"),
                                 "taf",
-                                InputTextMessageContent(res[1])
-                            )
+                                InputTextMessageContent(res[1]),
+                            ),
                         ),
-                        cachedTime = 0
+                        cachedTime = 0,
                     )
                 }
             }
@@ -145,7 +145,7 @@ suspend fun main() {
                 answerCallbackQuery(
                     it,
                     redisClient.get("raw_messages_${it.data}"),
-                    showAlert = true
+                    showAlert = true,
                 )
             }
         }

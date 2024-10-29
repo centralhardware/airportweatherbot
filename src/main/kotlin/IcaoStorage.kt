@@ -20,7 +20,6 @@ object IcaoStorage {
             redisClient.hset("iata2icao", Pair(iata.code, icao.code))
             KSLog.info("add $iata:$icao to cache")
             Either.Right(icao)
-        }
-            ?: Either.Left("ICAO not found for IATA: $iata")
+        } ?: Either.Left("ICAO not found for IATA: $iata")
     }
 }

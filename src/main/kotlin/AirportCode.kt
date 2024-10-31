@@ -1,11 +1,12 @@
 import io.github.mivek.provider.airport.AirportProvider
 import java.util.*
 
-sealed class AirportCode(val code: String) {
-    override fun toString(): String = code
+interface AirportCode {
+    val code: String
 }
 
-class Iata(code: String) : AirportCode(code) {
+@JvmInline
+value class Iata(override val code: String) : AirportCode {
 
     init {
         require(isValid(code))
@@ -18,7 +19,8 @@ class Iata(code: String) : AirportCode(code) {
     }
 }
 
-class Icao(code: String) : AirportCode(code) {
+@JvmInline
+value class Icao(override val code: String) : AirportCode {
 
     init {
         require(isValid(code))

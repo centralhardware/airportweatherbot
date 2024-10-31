@@ -7,8 +7,8 @@ import kotlin.math.roundToInt
 
 object Formatter {
 
-    val metarService = MetarService.getInstance()
-    val tafService = TAFService.getInstance()
+    private val metarService = MetarService.getInstance()
+    private val tafService = TAFService.getInstance()
 
     fun getMetar(icao: Icao): Pair<String, String> {
         KSLog.info("get metar for $icao")
@@ -22,13 +22,13 @@ object Formatter {
         return Pair(getCommon(taf), taf.message)
     }
 
-    fun getCommon(container: AbstractWeatherCode): String {
+    private fun getCommon(container: AbstractWeatherCode): String {
         val specific =
             when (container) {
                 is Metar ->
                     """
                 ${container.day} ${container.time}
-                temp: ${container.temperature}, dew point: ${container.dewPoint}, ${if (container.isNosig == true) "nosig" else ""}
+                temp: ${container.temperature}, dew point: ${container.dewPoint}, ${if (container.isNosig) "nosig" else ""}
                 """
                         .trimIndent()
                         .trimMargin()
@@ -53,25 +53,26 @@ object Formatter {
         return sb.toString().replace("null", "")
     }
 
-    fun convertSpeed(speed: Int, unit: String): Int =
+    private fun convertSpeed(speed: Int, unit: String): Int =
         when (unit.lowercase()) {
             "kt" -> (speed * 1.852).roundToInt()
             "mps" -> (speed * 3.6).roundToInt()
             else -> throw IllegalArgumentException()
         }
 
-    fun getAirport(airport: Airport): String =
+    private fun getAirport(airport: Airport): String =
         "${airport.name} ${airport.icao}(${airport.iata}) ${airport.altitude}"
 
-    fun getWind(wind: Wind?): String =
+    private fun getWind(wind: Wind?): String =
         if (wind == null) ""
         else {
             "wind: ${convertSpeed(wind.speed, wind.unit)} km/h ${wind.directionDegrees}(${wind.direction})"
         }
 
-    fun getVisibility(visibility: Visibility): String = "visibility: ${visibility.mainVisibility}"
+    private fun getVisibility(visibility: Visibility): String =
+        "visibility: ${visibility.mainVisibility}"
 
-    fun getVerticalVisibility(visibility: Int?): String =
+    private fun getVerticalVisibility(visibility: Int?): String =
         if (visibility == null) ""
         else {
             "vertical visibility: $visibility"
@@ -85,10 +86,9 @@ object Formatter {
 
     private fun getWeatherConditions(weatherCondition: List<WeatherCondition>): String =
         weatherCondition
-            .map {
-                "${it.intensity?.let { it.name.lowercase() }} ${it.descriptive} ${it.phenomenons.joinToString(",")}"
+            .joinToString(",") {
+                "${it.intensity?.name?.lowercase()} ${it.descriptive} ${it.phenomenons.joinToString(",")}"
             }
-            .joinToString(",")
             .trim()
 
     private fun getClouds(clouds: List<Cloud>): String =

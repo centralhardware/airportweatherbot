@@ -17,6 +17,8 @@ value class Iata(override val code: String) : AirportCode {
             return value.length == 3
         }
     }
+
+    override fun toString(): String = code
 }
 
 @JvmInline
@@ -31,6 +33,8 @@ value class Icao(override val code: String) : AirportCode {
             return value.length == 4
         }
     }
+
+    override fun toString(): String = code
 }
 
 private val airportProvider = ServiceLoader.load(AirportProvider::class.java).iterator().next()

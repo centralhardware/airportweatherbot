@@ -4,6 +4,10 @@ fun String?.ifNotEmpty(block: (String) -> Unit) {
     }
 }
 
-fun String.asIcao(): Icao {
-    return Icao(this)
+fun String.asIcao(): Icao? {
+    return when (this.length) {
+        3 -> Iata(this).asIcao()
+        4 -> Icao(this)
+        else -> throw IllegalArgumentException()
+    }
 }

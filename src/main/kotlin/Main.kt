@@ -99,6 +99,12 @@ suspend fun main() {
                         redisClient.lmove(key, key, LeftRightOption.LEFT, LeftRightOption.LEFT)!!
                     val type = command.split(" ")[0]
                     val icao = command.split(" ")[1].asIcao()
+
+                    if (icao == null) {
+                        sendTextMessage(it.chat, "Что то пошло не так")
+                        return@withAction
+                    }
+
                     val res =
                         when (type) {
                             "m" -> Formatter.getMetar(icao)

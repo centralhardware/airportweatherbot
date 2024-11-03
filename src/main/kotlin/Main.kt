@@ -1,5 +1,3 @@
-import dev.inmo.kslog.common.KSLog
-import dev.inmo.kslog.common.info
 import dev.inmo.tgbotapi.AppConfig
 import dev.inmo.tgbotapi.extensions.api.answers.answer
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
@@ -11,7 +9,6 @@ import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onComman
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onCommandWithArgs
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onDataCallbackQuery
 import dev.inmo.tgbotapi.extensions.utils.extensions.raw.from
-import dev.inmo.tgbotapi.extensions.utils.extensions.raw.text
 import dev.inmo.tgbotapi.extensions.utils.types.buttons.dataButton
 import dev.inmo.tgbotapi.extensions.utils.types.buttons.inlineKeyboard
 import dev.inmo.tgbotapi.longPolling
@@ -26,9 +23,9 @@ import io.github.crackthecodeabhi.kreds.args.LeftRightOption
 import io.github.crackthecodeabhi.kreds.args.SetOption
 import io.github.crackthecodeabhi.kreds.connection.Endpoint
 import io.github.crackthecodeabhi.kreds.connection.newClient
-import java.util.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import java.util.*
 
 val redisClient = newClient(Endpoint.from(System.getenv("REDIS_URL")))
 
@@ -41,7 +38,6 @@ suspend fun main() {
                 BotCommand("r", "repeat last command"),
             )
             onCommandWithArgs(Regex("metar|m")) { message, args ->
-                log(message.text, message.from)
                 withAction(message.chat.id, TypingAction) {
                     IcaoStorage.get(args.first().lowercase())
                         .fold(
@@ -67,7 +63,6 @@ suspend fun main() {
                 }
             }
             onCommandWithArgs(Regex("taf|t")) { message, args ->
-                log(message.text, message.from)
                 withAction(message.chat.id, TypingAction) {
                     IcaoStorage.get(args.first().lowercase())
                         .fold(
@@ -122,7 +117,6 @@ suspend fun main() {
                 }
             }
             onAnyInlineQuery {
-                log("inline " + it.query, it.from)
                 IcaoStorage.get(it.query.lowercase()).map { value ->
                     val res =
                         awaitAll(
@@ -168,8 +162,4 @@ suspend fun saveRawMessage(raw: String): String {
     val id = UUID.randomUUID().toString()
     redisClient.set("raw_messages_$id", raw, SetOption.Builder().exSeconds(604800u).build())
     return id
-}
-
-fun log(text: String?, from: User?) {
-    from?.let { KSLog.info("$text from ${it.id.chatId} ${it.firstName} ${it.lastName}") }
 }

@@ -23,9 +23,9 @@ import io.github.crackthecodeabhi.kreds.args.LeftRightOption
 import io.github.crackthecodeabhi.kreds.args.SetOption
 import io.github.crackthecodeabhi.kreds.connection.Endpoint
 import io.github.crackthecodeabhi.kreds.connection.newClient
+import java.util.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import java.util.*
 
 val redisClient = newClient(Endpoint.from(System.getenv("REDIS_URL")))
 

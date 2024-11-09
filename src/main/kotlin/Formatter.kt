@@ -11,13 +11,11 @@ object Formatter {
     private val tafService = TAFService.getInstance()
 
     fun getMetar(icao: Icao): Pair<String, String> {
-        KSLog.info("get metar for $icao")
         val metar = metarService.retrieveFromAirport(icao.code)
         return Pair(getCommon(metar), metar.message)
     }
 
     fun getTaf(icao: Icao): Pair<String, String> {
-        KSLog.info("get taf for $icao")
         val taf = tafService.retrieveFromAirport(icao.code)
         return Pair(getCommon(taf), taf.message)
     }

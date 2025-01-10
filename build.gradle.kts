@@ -21,7 +21,7 @@ dependencies {
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")
     implementation("com.google.guava:guava:33.4.0-jre")
     implementation("io.github.crackthecodeabhi:kreds:0.9.1")
-    implementation("com.github.seratch:kotliquery:1.9.0")
+    implementation("com.github.seratch:kotliquery:1.9.1")
 }
 
 tasks.test {

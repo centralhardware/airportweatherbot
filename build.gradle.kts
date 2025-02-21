@@ -14,8 +14,8 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.inmo:tgbotapi:23.2.0")
-    implementation("com.github.centralhardware:ktgbotapi-commons:f0db12f60b")
+    implementation("dev.inmo:tgbotapi:24.0.0")
+    implementation("com.github.centralhardware:ktgbotapi-commons:6ef1dde4fe")
     implementation("io.github.mivek:metarParser-services:2.17.1")
     implementation("io.arrow-kt:arrow-core:2.0.1")
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")

@@ -19,7 +19,7 @@ dependencies {
     implementation("io.github.mivek:metarParser-services:2.17.2")
     implementation("io.arrow-kt:arrow-core:2.0.1")
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")
-    implementation("com.google.guava:guava:33.4.7-jre")
+    implementation("com.google.guava:guava:33.4.8-jre")
     implementation("io.github.crackthecodeabhi:kreds:0.9.1")
     implementation("com.github.seratch:kotliquery:1.9.1")
 }

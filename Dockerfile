@@ -1,10 +1,10 @@
-FROM gradle:jdk23-graal as gradle
+FROM gradle:jdk24-graal as gradle
 
 COPY ./ ./
 
 RUN gradle installDist
 
-FROM openjdk:23-slim
+FROM openjdk:24-slim
 
 WORKDIR /znatokiBot
 

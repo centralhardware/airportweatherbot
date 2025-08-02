@@ -1,4 +1,3 @@
-import dev.inmo.tgbotapi.Trace
 import io.github.mivek.model.*
 import io.github.mivek.service.MetarService
 import io.github.mivek.service.TAFService

@@ -1,5 +1,4 @@
 import arrow.core.Either
-import dev.inmo.tgbotapi.Trace
 
 object IcaoStorage {
 

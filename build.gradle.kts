@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm") version "2.2.0"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
     application
 }
 
@@ -18,7 +17,7 @@ repositories {
 
 dependencies {
     implementation("dev.inmo:tgbotapi:27.1.0")
-    implementation("com.github.centralhardware:ktgbotapi-commons:6ef1dde4fe")
+    implementation("com.github.centralhardware:ktgbotapi-commons:063599df7c")
     implementation("io.github.mivek:metarParser-services:2.20.0")
     implementation("io.arrow-kt:arrow-core:2.1.2")
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")

@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.inmo:tgbotapi:27.1.1")
+    implementation("dev.inmo:tgbotapi:27.1.2")
     implementation("com.github.centralhardware:ktgbotapi-commons:beafbfc9a8")
     implementation("io.github.mivek:metarParser-services:2.20.0")
     implementation("io.arrow-kt:arrow-core:2.1.2")

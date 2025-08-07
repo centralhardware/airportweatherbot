@@ -15,9 +15,11 @@ repositories {
     maven("https://jitpack.io")
 }
 
+val ktgbotapiVersion = "27.1.2"
+
 dependencies {
-    implementation("dev.inmo:tgbotapi:27.1.2")
-    implementation("com.github.centralhardware:ktgbotapi-commons:beafbfc9a8")
+    implementation("dev.inmo:tgbotapi:$ktgbotapiVersion")
+    implementation("com.github.centralhardware:ktgbotapi-commons:$ktgbotapiVersion-1")
     implementation("io.github.mivek:metarParser-services:2.20.0")
     implementation("io.arrow-kt:arrow-core:2.1.2")
     implementation("com.google.guava:guava:33.4.8-jre")

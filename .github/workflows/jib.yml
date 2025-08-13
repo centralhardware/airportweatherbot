@@ -1,0 +1,74 @@
+name: Build and Publish Docker image with Jib
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*.*.*" ]
+  pull_request:
+    branches: [ "**" ]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '24'
+          cache: gradle
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v3
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Build on PRs (no push)
+        if: github.event_name == 'pull_request'
+        run: ./gradlew --no-daemon build
+
+      - name: Compute image name and tags
+        if: github.event_name != 'pull_request'
+        id: meta
+        shell: bash
+        run: |
+          REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE="ghcr.io/${REPO_LOWER}"
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
+
+          SHORT_SHA=${GITHUB_SHA::7}
+          TAGS="sha-${SHORT_SHA}"
+
+          if [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/master" ]]; then
+            TAGS+=" , latest"
+          fi
+
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            TAG_NAME="${{ github.ref_name }}"
+            TAGS+=" , ${TAG_NAME}"
+          fi
+
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+
+      - name: Build and push image with Jib
+        if: github.event_name != 'pull_request'
+        env:
+          JIB_TO_IMAGE: ${{ steps.meta.outputs.image }}
+          JIB_TO_TAGS: ${{ steps.meta.outputs.tags }}
+          JIB_TO_AUTH_USERNAME: ${{ github.actor }}
+          JIB_TO_AUTH_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./gradlew --no-daemon \
+            -Djib.to.image="$JIB_TO_IMAGE" \
+            -Djib.to.tags="$JIB_TO_TAGS" \
+            -Djib.to.auth.username="$JIB_TO_AUTH_USERNAME" \
+            -Djib.to.auth.password="$JIB_TO_AUTH_PASSWORD" \
+            jib

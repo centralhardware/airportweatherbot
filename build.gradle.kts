@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "2.2.0"
     application
+    id("com.google.cloud.tools.jib") version "3.4.3"
 }
 
 group = "me.centralhardware"
@@ -26,9 +27,35 @@ dependencies {
     implementation("io.github.crackthecodeabhi:kreds:0.9.1")
 }
 
+jib {
+    from {
+        image = System.getenv("JIB_FROM_IMAGE") ?: "eclipse-temurin:24-jre"
+    }
+    to {
+        // Image repository and tags will be supplied from CI via -Djib.to.image and -Djib.to.tags
+    }
+    container {
+        mainClass = "MainKt"
+        jvmFlags = listOf("-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0")
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        labels = mapOf(
+            "org.opencontainers.image.title" to "airportweatherbot",
+            "org.opencontainers.image.source" to (System.getenv("GITHUB_SERVER_URL")?.let { server ->
+                val repo = System.getenv("GITHUB_REPOSITORY")
+                if (repo != null) "$server/$repo" else ""
+            } ?: ""),
+            "org.opencontainers.image.revision" to (System.getenv("GITHUB_SHA") ?: "")
+        )
+        // Uncomment if the app listens on a port:
+        // ports = listOf("8080")
+        user = "10001"
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
 }
+
 kotlin {
     jvmToolchain(24)
 }

@@ -32,7 +32,6 @@ jib {
         image = System.getenv("JIB_FROM_IMAGE") ?: "eclipse-temurin:24-jre"
     }
     to {
-        // Image repository and tags will be supplied from CI via -Djib.to.image and -Djib.to.tags
     }
     container {
         mainClass = "MainKt"
@@ -46,8 +45,6 @@ jib {
             } ?: ""),
             "org.opencontainers.image.revision" to (System.getenv("GITHUB_SHA") ?: "")
         )
-        // Uncomment if the app listens on a port:
-        // ports = listOf("8080")
         user = "10001"
     }
 }

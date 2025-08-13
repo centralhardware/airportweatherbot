@@ -51,12 +51,10 @@ jobs:
             TAGS+=("latest")
           fi
 
-          # тэг релиза → добавляем имя тэга
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
             TAGS+=("$GITHUB_REF_NAME")
           fi
 
-          # склеиваем без пробелов
           (IFS=,; echo "tags=${TAGS[*]}") >> "$GITHUB_OUTPUT"
 
       - name: Build and push image with Jib
